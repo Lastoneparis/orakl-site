@@ -2,55 +2,120 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Orakl — Predict Anything</title>
-<!-- social share (og/twitter) -->
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Hugo Moriceau">
-<meta property="og:title" content="Orakl — Predict Anything">
-<meta property="og:description" content="An on-device predictor for iPhone — make a forecast about anything, privately.">
-<meta property="og:url" content="https://lastoneparis.github.io/orakl-site/">
-<meta property="og:image" content="https://lastoneparis.github.io/orakl-site/share.png">
-<meta property="og:image:secure_url" content="https://lastoneparis.github.io/orakl-site/share.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Orakl — Predict Anything">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Orakl — Predict Anything">
-<meta name="twitter:description" content="An on-device predictor for iPhone — make a forecast about anything, privately.">
-<meta name="twitter:image" content="https://lastoneparis.github.io/orakl-site/share.png">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orakl — a decision simulator that argues with itself</title>
+<meta name="description" content="Describe a decision. A swarm of simulated agents with opposing views weighs it and hands you a structured analysis. Entirely on your device.">
 <style>
-  :root{ --bg:#0b0a14; --panel:#141122; --ink:#F3F0FB; --ink2:#B9B2D6; --ink3:#8a83a8; --v:#8E44FF; --cy:#3FC7E0; --line:rgba(255,255,255,.08); }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;background:
-    radial-gradient(120% 80% at 15% -5%, #1a1330 0%, transparent 55%),
-    radial-gradient(120% 80% at 90% 10%, #201736 0%, transparent 52%), var(--bg);
-    color:var(--ink);line-height:1.65;min-height:100vh;text-align:center}
-  .wrap{max-width:680px;margin:0 auto;padding:96px 22px}
-  .dot{width:64px;height:64px;border-radius:18px;margin:0 auto 22px;background:linear-gradient(135deg,var(--v),var(--cy));box-shadow:0 16px 40px -10px var(--v)}
-  h1{font-size:clamp(34px,7vw,56px);font-weight:750;letter-spacing:-.03em;
-     background:linear-gradient(92deg,#a879ff,var(--cy));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .tag{font-size:20px;color:var(--ink2);margin:14px 0 40px}
-  .row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-  a.btn{display:inline-block;padding:14px 24px;border-radius:14px;font-weight:600;text-decoration:none;color:#fff;
-    background:linear-gradient(92deg,var(--v),var(--cy));box-shadow:0 12px 30px -10px var(--v)}
-  a.ghost{background:transparent;border:1px solid var(--line);color:var(--ink2)}
-  footer{margin-top:56px;color:var(--ink3);font-size:14px}
-  a{color:#b79bff}
+:root{--bg:#faf9f6;--ink:#191b1f;--dim:#5f6570;--rule:#e3e1d9;--card:#fff;
+      --for:#2f6f4f;--against:#9c4221;--mark:#5b4bcc}
+@media(prefers-color-scheme:dark){:root{--bg:#111214;--ink:#eceef2;--dim:#9aa1ac;--rule:#282a2f;--card:#181a1e;--for:#6cc39a;--against:#e08a5f;--mark:#a496ff}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font:16.5px/1.72 ui-serif,Georgia,"Times New Roman",serif}
+.sheet{max-width:44rem;margin:0 auto;padding:0 24px 96px}
+header{padding:76px 0 34px;border-bottom:2px solid var(--ink)}
+.mark{font-family:ui-sans-serif,system-ui,sans-serif;font-size:11px;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--mark);font-weight:650;margin-bottom:18px}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.14;letter-spacing:-.015em;font-weight:600;max-width:17ch}
+.stand{color:var(--dim);font-size:18.5px;margin-top:16px;max-width:44ch}
+h2{font-family:ui-sans-serif,system-ui,sans-serif;font-size:11.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);font-weight:650;margin-bottom:18px}
+section{padding:42px 0;border-bottom:1px solid var(--rule)}
+p{margin-bottom:14px}
+p.dim{color:var(--dim)}
+q{font-style:italic}
+/* method: numbered steps in a hanging-indent academic style */
+.method{counter-reset:m;list-style:none}
+.method li{counter-increment:m;position:relative;padding-left:52px;margin-bottom:22px}
+.method li:last-child{margin-bottom:0}
+.method li::before{content:counter(m,decimal-leading-zero);position:absolute;left:0;top:2px;
+  font-family:ui-sans-serif,system-ui,sans-serif;font-size:12px;font-weight:650;color:var(--mark);letter-spacing:.06em}
+.method b{display:block;font-weight:600;margin-bottom:2px}
+.method span{color:var(--dim);font-size:16px}
+/* the two-column argument — Orakl's signature */
+.argue{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin:6px 0 4px}
+.argue > div{background:var(--card);padding:18px}
+.argue h3{font-family:ui-sans-serif,system-ui,sans-serif;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;margin-bottom:9px;font-weight:650}
+.argue .f h3{color:var(--for)} .argue .a h3{color:var(--against)}
+.argue p{font-size:15.5px;color:var(--dim);margin-bottom:9px}
+.argue p:last-child{margin-bottom:0}
+@media(max-width:560px){.argue{grid-template-columns:1fr}}
+.verdict{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:18px;margin-top:12px;
+  font-family:ui-sans-serif,system-ui,sans-serif;font-size:14px;color:var(--dim);
+  display:flex;gap:26px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.verdict b{display:block;color:var(--ink);font-size:20px;font-weight:650}
+dl dt{font-weight:600;margin-top:20px}
+dl dd{color:var(--dim);margin-top:3px}
+a{color:var(--mark)}
+footer{padding-top:26px;color:var(--dim);font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px;text-align:center}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="dot"></div>
-  <h1>Orakl</h1>
-  <div class="tag">Ask anything about the future. A swarm of simulated minds weighs it up — privately, on your device.</div>
-  <div class="row">
-    <a class="btn" href="privacy.html">Privacy Policy</a>
-    <a class="ghost btn" href="mailto:hugomoriceau@icloud.com">Support</a>
+<div class="sheet">
+
+<header>
+  <div class="mark">Orakl &middot; decision simulator</div>
+  <h1>A second opinion that disagrees with itself first</h1>
+  <p class="stand">Describe what you are weighing. Orakl runs a swarm of simulated agents holding deliberately opposing views, lets them argue, and hands you the structured analysis &mdash; not a one-word answer.</p>
+</header>
+
+<section>
+  <h2>The method</h2>
+  <ol class="method">
+    <li><b>You state the decision in your own words</b><span>&ldquo;Should I take the offer or stay?&rdquo; &mdash; plain language, with as much or as little context as you want to add.</span></li>
+    <li><b>The swarm is seeded with opposing priors</b><span>Agents are not identical. Some are given reasons to favour the move, others reasons to resist it, so the argument is real rather than a chorus.</span></li>
+    <li><b>They argue, and the disagreement is measured</b><span>How split the swarm is matters as much as where it lands. A 51/49 result is reported as one, not rounded into false confidence.</span></li>
+    <li><b>You get the reasoning, not a verdict</b><span>The strongest case for and the strongest case against, the factors that moved the result, and the confidence &mdash; so you can disagree with it on specific grounds.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>What comes back</h2>
+  <div class="argue">
+    <div class="f"><h3>Strongest case for</h3>
+      <p>The compensation gap compounds over the years you would stay.</p>
+      <p>The skills you named as missing are learned faster in the new role.</p></div>
+    <div class="a"><h3>Strongest case against</h3>
+      <p>You are trading a known manager for an unknown one.</p>
+      <p>Your stated reason is fatigue, which follows people between jobs.</p></div>
   </div>
-  <footer>© 2026 Hugo Moriceau · Orakl runs 100% on‑device. No accounts, no tracking, nothing leaves your phone.</footer>
+  <div class="verdict">
+    <span>Leans<b>Yes &middot; 61%</b></span>
+    <span>Confidence<b>68%</b></span>
+    <span>Split<b>39%</b></span>
+    <span>Agents<b>600</b></span>
+  </div>
+  <p class="dim" style="margin-top:14px">A high split with high confidence is Orakl telling you the decision is genuinely close and that it knows why &mdash; which is more useful than a number pretending to be certain.</p>
+</section>
+
+<section>
+  <h2>It never leaves your device</h2>
+  <p class="dim">The whole simulation runs locally, on the iPhone or the Mac in front of you. There is no account, no server and no upload &mdash; which is the only reason it is reasonable to type a real decision about your job, your money or your family into it.</p>
+</section>
+
+<section>
+  <h2>Honest limits</h2>
+  <p class="dim">Orakl simulates argument; it does not know anything about your specific circumstances beyond what you type, and it cannot see the future. It is a structured way to think, in the tradition of writing down both columns before you decide &mdash; not a forecast, and not advice of any professional kind.</p>
+</section>
+
+<section style="border-bottom:0">
+  <h2>Questions</h2>
+  <dl>
+    <dt>Does it need an internet connection?</dt>
+    <dd>No. Everything runs on-device, so it works in airplane mode.</dd>
+    <dt>iPhone and Mac?</dt>
+    <dd>Both, as separate apps. Neither syncs to the other, because neither talks to a server.</dd>
+    <dt>Is anything I type stored anywhere?</dt>
+    <dd>Only on your own device, and deleting the app deletes it. See the <a href="privacy.html">privacy policy</a>.</dd>
+  </dl>
+</section>
+
+<footer>
+  <a href="support.html">Support</a> &middot; <a href="privacy.html">Privacy</a> &middot;
+  <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">EULA</a><br><br>
+  &copy; 2026 Oshi Lab &middot; contact@oshi-messenger.com
+</footer>
 </div>
 </body>
 </html>
